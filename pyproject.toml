@@ -7,7 +7,9 @@ requires-python = ">=3.14"
 dependencies = [
     "ccxt>=4.5.39",
     "matplotlib>=3.10.8",
+    "optuna>=4.7.0",
     "pandas>=3.0.1",
+    "requests>=2.32.5",
     "seaborn>=0.13.2",
     "statsmodels>=0.14.6",
     "yfinance>=1.2.0",

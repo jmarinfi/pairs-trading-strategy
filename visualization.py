@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
+import pandas as pd
 
 if TYPE_CHECKING:
     from cointegration import CointegrationTestResult, BestPair
@@ -33,7 +34,10 @@ def cointegration_heatmap(
         ax=ax,
     )
 
-    ax.set_title("Cointegration Test p-value Matrix: Maskless")
+    ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha="right")
+    ax.set_yticklabels(ax.get_yticklabels(), rotation=0)
+    ax.set_title("Cointegration Test p-value Matrix")
+    fig.tight_layout()
 
     return fig, ax
 
@@ -66,5 +70,48 @@ def spread_and_zscore(best_pair: BestPair, multiplier_std: int) -> tuple[Figure,
     plt.xlabel("Date")
     plt.suptitle(f"Spread and Z-score for {best_pair.name1} and {best_pair.name2}")
     plt.tight_layout()
+
+    return fig, (ax1, ax2)
+
+
+def visualize_backtest(
+    df_backtest: pd.DataFrame,
+) -> tuple["Figure", tuple["Axes", "Axes"]]:
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(14, 10), sharex=True)
+
+    # Gráfico de Equity
+    ax1.plot(
+        df_backtest.index,
+        df_backtest["equity"],
+        label="Strategy Equity",
+        color="purple",
+    )
+    ax1.set_title("Strategy Equity Curve")
+    ax1.set_ylabel("Cumulative Equity")
+    ax1.grid(True, alpha=0.3)
+    ax1.legend(loc="upper left")
+
+    # Gráfico de Precios (S1 y S2 en el mismo subplot pero ejes Y separados)
+    color1 = "blue"
+    ax2.plot(df_backtest.index, df_backtest["S1"], label="S1 Price", color=color1)
+    ax2.set_ylabel("S1 Price", color=color1)
+    ax2.tick_params(axis="y", labelcolor=color1)
+    ax2.grid(True, alpha=0.3)
+    ax2.legend(loc="upper left")
+
+    # Eje gemelo para S2
+    ax3 = ax2.twinx()
+    color2 = "orange"
+    ax3.plot(
+        df_backtest.index, df_backtest["S2"], label="S2 Price", color=color2, alpha=0.8
+    )
+    ax3.set_ylabel("S2 Price", color=color2)
+    ax3.tick_params(axis="y", labelcolor=color2)
+    ax3.legend(loc="upper right")
+
+    ax2.set_title("Pair Prices (S1 and S2)")
+    ax2.set_xlabel("Date")
+
+    fig.tight_layout()
 
     return fig, (ax1, ax2)

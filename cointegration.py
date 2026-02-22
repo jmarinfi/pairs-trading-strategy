@@ -62,8 +62,8 @@ def find_best_pair(
     zscore = zscore.dropna()
 
     return BestPair(
-        name1=S1.name,
-        name2=S2.name,
+        name1=str(S1.name),
+        name2=str(S2.name),
         series1=S1,
         series2=S2,
         spread=spread,
