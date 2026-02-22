@@ -174,6 +174,9 @@ def live_strategy():
             print(
                 f"   📊 Posiciones activas -> S1 Long: {pair['S1_has_position_long']} | S1 Short: {pair['S1_has_position_short']}"
             )
+            print(
+                f"   📊 Posiciones activas -> S2 Long: {pair['S2_has_position_long']} | S2 Short: {pair['S2_has_position_short']}"
+            )
 
             action_taken = False
 
